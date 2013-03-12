@@ -62,7 +62,11 @@ class Bootstrap(object):
                           executable, "3c152e15898578db937d5253d1478b39")
             self.mark_executable(executable)
 
-        os.system("%s --distribute --no-site-packages '%s'" % (executable, self.virtualenv_dir))
+        os.chdir(self.bootstrap_dir)
+        try:
+            os.system("%s --distribute --no-site-packages '%s'" % (executable, self.virtualenv_dir))
+        finally:
+            os.chdir(self.working_dir)
 
 
     def download(self, source, target, hashing=None):
@@ -72,7 +76,7 @@ class Bootstrap(object):
             return
         if os.system("curl '%s' -o '%s'" % (source, target)) == 0:
             return
-        
+
         logger.error("Unable to download '%s'" % source)
         raise RuntimeError
 
