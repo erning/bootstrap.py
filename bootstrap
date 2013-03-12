@@ -4,7 +4,9 @@
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
-from bootstrap import ve
+from bootstrap import bootstrap, ve
 
-ve("which python")
+import os
+bootstrap(os.path.dirname(os.path.abspath(__file__)))
+
 ve("which python")

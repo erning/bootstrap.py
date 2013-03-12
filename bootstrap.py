@@ -102,8 +102,15 @@ class Bootstrap(object):
 
 
 _bootstrap = None
+
+__all_ = ["bootstrap", "ve"]
+
+def bootstrap(working_dir=None):
+    global _bootstrap
+    _bootstrap = Bootstrap(working_dir)
+
 def ve(cmd):
     global _bootstrap
     if not _bootstrap:
-        _bootstrap = Bootstrap()
+        bootstrap()
     _bootstrap.ve(cmd)
