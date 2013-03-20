@@ -92,7 +92,7 @@ class Bootstrap(object):
 
     def install_ve(self):
         executable = "%s/%s" % (self.bootstrap_dir, "ve")
-        self.download("https://raw.github.com/erning/ve/v1.0/ve",
+        self.download("https://raw.github.com/anjuke/ve/v1.0/ve",
                       executable, "7f3a048a8f4a7a1c4e6c8d4cc67b5674")
         self.mark_executable(executable)
 
