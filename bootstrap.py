@@ -51,8 +51,8 @@ class Bootstrap(object):
 
         executable = None
         try:
-            executable = subprocess.check_output(['which', 'virtualenv'])
-            executable.strip()
+            executable = subprocess.check_output(['command', '-v', 'virtualenv'])
+            executable = executable.strip()
         except:
             pass
 

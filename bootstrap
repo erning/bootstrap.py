@@ -9,4 +9,4 @@ from bootstrap import bootstrap, ve
 import os
 bootstrap(os.path.dirname(os.path.abspath(__file__)))
 
-ve("which python")
+ve("command -v python")
