@@ -58,8 +58,8 @@ class Bootstrap(object):
 
         if not executable:
             executable = '%s/%s' % (self.bootstrap_dir, 'virtualenv')
-            self.download('https://raw.github.com/pypa/virtualenv/1.9.1/virtualenv.py',
-                          executable, '3c152e15898578db937d5253d1478b39')
+            self.download('https://raw.github.com/pypa/virtualenv/1.11/virtualenv.py',
+                          executable, '1465e0edb806da81a24e11ad886b656d')
             self.mark_executable(executable)
 
         os.chdir(self.bootstrap_dir)
