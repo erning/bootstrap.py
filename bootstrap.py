@@ -52,6 +52,9 @@ class Bootstrap(object):
         executable = None
         try:
             executable = subprocess.check_output(['command', '-v', 'virtualenv'])
+            if not type(executable) is str:
+                # convert from bytes to str (unicode) under python3
+                executable = executable.decode()
             executable = executable.strip()
         except:
             pass
