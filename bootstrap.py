@@ -58,8 +58,8 @@ class Bootstrap(object):
 
         if not executable:
             executable = '%s/%s' % (self.bootstrap_dir, 'virtualenv')
-            self.download('https://raw.github.com/pypa/virtualenv/1.11/virtualenv.py',
-                          executable, '1465e0edb806da81a24e11ad886b656d')
+            self.download('https://raw.github.com/pypa/virtualenv/1.11.4/virtualenv.py',
+                          executable, '3eef285978228663423c07030550f635')
             self.mark_executable(executable)
 
         os.chdir(self.bootstrap_dir)
@@ -92,7 +92,7 @@ class Bootstrap(object):
 
     def install_ve(self):
         executable = '%s/%s' % (self.bootstrap_dir, 've')
-        self.download('https://raw.github.com/anjuke/ve/v1.1/ve',
+        self.download('https://raw.github.com/erning/ve/v1.1/ve',
                       executable, 'fd0f0601c6732ca9a5b3b62e691d68cb')
         self.mark_executable(executable)
 
