@@ -51,7 +51,7 @@ class Bootstrap(object):
 
         executable = None
         try:
-            executable = subprocess.check_output(['command', '-v', 'virtualenv'])
+            executable = subprocess.check_output(['command', '-v', 'virtualenv-1.11.4/virtualenv.py'])
             if not type(executable) is str:
                 # convert from bytes to str (unicode) under python3
                 executable = executable.decode()
@@ -60,10 +60,11 @@ class Bootstrap(object):
             pass
 
         if not executable:
-            executable = '%s/%s' % (self.bootstrap_dir, 'virtualenv')
-            self.download('https://raw.github.com/pypa/virtualenv/1.11.4/virtualenv.py',
-                          executable, '3eef285978228663423c07030550f635')
-            self.mark_executable(executable)
+            virtualenv_tar = '%s/%s' % (self.bootstrap_dir, 'virtualenv.tar.gz')
+            executable = '%s/%s' % (self.bootstrap_dir, 'virtualenv-1.11.4/virtualenv.py')
+            self.download('https://github.com/pypa/virtualenv/archive/1.11.4.tar.gz', 
+                         virtualenv_tar, '6dc938b8a5c818f773e09049469bba05')
+            os.system('tar -zxvf "%s" -C "%s"' % (virtualenv_tar, self.bootstrap_dir))
 
         os.chdir(self.bootstrap_dir)
         try:
