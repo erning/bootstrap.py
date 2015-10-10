@@ -3,19 +3,27 @@
 if __name__ == '__main__':
     exit(1)
 
+
+VIRTUALENV_VERSION = '13.1.2'
+VIRTUALENV_TAR_MD5 = 'f39a04264d57a99ea98a1660f3c5faaa'
+VE_VER = 1.2
+VE_MD5 = 'a0d841c5c0b8cacf02f85b7682de10dc'
+
+
 import os
 import subprocess
 import logging
 import hashlib
 import stat
 
+
 logger = logging.getLogger(__name__)
+
 
 class Bootstrap(object):
     working_dir = None
     bootstrap_dir = None
     virtualenv_dir = None
-
 
     def __init__(self, working_dir=None):
         self.working_dir = working_dir or os.getcwd()
@@ -32,7 +40,6 @@ class Bootstrap(object):
         self.install_virtualenv()
         self.install_ve()
 
-
     def _config_dot_dir(self, env_name, default_value=None):
         value = os.environ.get(env_name)
         if not value:
@@ -44,14 +51,16 @@ class Bootstrap(object):
         else:
             return '%s/%s' % (self.working_dir, value)
 
-
     def install_virtualenv(self):
         if os.path.isfile('%s/%s' % (self.virtualenv_dir, 'bin/activate')):
             return
 
         executable = None
         try:
-            executable = subprocess.check_output(['command', '-v', 'virtualenv-1.11.4/virtualenv.py'])
+            executable = subprocess.check_output([
+                'command', '-v',
+                'virtualenv-%s/virtualenv.py' % VIRTUALENV_VERSION
+            ])
             if not type(executable) is str:
                 # convert from bytes to str (unicode) under python3
                 executable = executable.decode()
@@ -61,9 +70,10 @@ class Bootstrap(object):
 
         if not executable:
             virtualenv_tar = '%s/%s' % (self.bootstrap_dir, 'virtualenv.tar.gz')
-            executable = '%s/%s' % (self.bootstrap_dir, 'virtualenv-1.11.4/virtualenv.py')
-            self.download('https://github.com/pypa/virtualenv/archive/1.11.4.tar.gz', 
-                         virtualenv_tar, '6dc938b8a5c818f773e09049469bba05')
+            executable = '%s/virtualenv-%s/virtualenv.py' % (self.bootstrap_dir, VIRTUALENV_VERSION)
+            self.download(
+                'https://github.com/pypa/virtualenv/archive/%s.tar.gz' % VIRTUALENV_VERSION,
+                virtualenv_tar, VIRTUALENV_TAR_MD5)
             os.system('tar -zxvf "%s" -C "%s"' % (virtualenv_tar, self.bootstrap_dir))
 
         os.chdir(self.bootstrap_dir)
@@ -71,7 +81,6 @@ class Bootstrap(object):
             os.system('%s --distribute --no-site-packages "%s"' % (executable, self.virtualenv_dir))
         finally:
             os.chdir(self.working_dir)
-
 
     def download(self, source, target, hashing=None):
         if hashing and os.path.isfile(target) and hashing == self.md5sum(target):
@@ -84,20 +93,17 @@ class Bootstrap(object):
         logger.error('Unable to download "%s"' % source)
         raise RuntimeError
 
-
     def mark_executable(self, path):
         st = os.stat(path)
         os.chmod(path, st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
-
     def md5sum(self, filename):
         return hashlib.md5(open(filename, 'rb').read()).hexdigest()
 
-
     def install_ve(self):
         executable = '%s/%s' % (self.bootstrap_dir, 've')
-        self.download('https://raw.github.com/erning/ve/v1.1/ve',
-                      executable, 'fd0f0601c6732ca9a5b3b62e691d68cb')
+        self.download('https://raw.github.com/erning/ve/v%s/ve' % VE_VER,
+                      executable, VE_MD5)
         self.mark_executable(executable)
 
 
